@@ -3,8 +3,8 @@ using System.Collections;
 
 public class Shield : SpecObject
 {
-    //public enum ShieldType { Round, Omni };
-    //public ShieldType shieldType;
+    public enum ShieldType { Round, Omni };
+    public ShieldType shieldType;
     public bool shutdown = false; // Whether the shield is closed.
     public bool broken = false; // Whether the shield can't be raise.
     public bool turnoff = false; // State description whether i should raise the shield.
@@ -61,10 +61,10 @@ public class Shield : SpecObject
 
         sp += spRegen * Time.deltaTime;
         if (sp > spMax) sp = spMax;
-        
+
         if (turnoff) TryCloseShield();
         else TryRaiseShield();
-        
+
         // Do the shield reparing.
         if (broken)
         {
@@ -90,9 +90,12 @@ public class Shield : SpecObject
             rd.color = x;
         }
 
+        if (shieldType == ShieldType.Round)
+            this.gameObject.transform.Rotate(0f, 0f, 30f * Time.deltaTime);
         // Effect changing.
         if (shutdown) cd.enabled = false;
         else cd.enabled = true;
+
     }
 
     /// <summary>

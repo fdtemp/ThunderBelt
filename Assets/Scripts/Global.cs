@@ -12,6 +12,8 @@ public class Global : MonoBehaviour
 
         string[] weapons;
         string[] devices;
+
+        float flySpeed; // The speed camera flying with plane, used to calculated FX.
     };
     public static PlayerInfo playerInfo;
 
