@@ -28,6 +28,8 @@ public class PlayerObject : SpecObject
     public float spRegen { get { return shield.spRegen; } }
 
     public Vector2 v; // Velocity instead of RigidBody.velocity.
+
+    public Vector2[] weaponLocation; // The weapon mount point on plane.
 	
 	protected override void Update() 
 	{
