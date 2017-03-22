@@ -6,24 +6,29 @@ using System.Collections;
 /// Provides cd and so on.
 /// Notice this is to mount on Weapon and Skill object but not player's plane.
 /// </summary>
-public class Device : MonoBehaviour
+abstract public class Device : MonoBehaviour
 {
     public float cd = 1f; // Cool down time.
 
-    float t = 0f; // Time counter.
+    protected float t = 0f; // Time counter.
+
+    public KeyCode keyBind;
 
     virtual protected void Update()
     {
         t -= Time.deltaTime;
         if (t <= 0f) t = 0f;
+
+        if (Input.GetKey(keyBind)) TryAct();
     }
 
     /// <summary>
     /// Try to do action according to cd.
     /// </summary>
-    virtual public void TryAct()
+    virtual public bool TryAct()
     {
-        if (t == 0) { Act(); t += cd; }
+        if (t == 0) { Act(); t += cd; return true; }
+        return false;
     }
 
     /// <summary>
@@ -33,6 +38,5 @@ public class Device : MonoBehaviour
     {
         // Do nothing.
     }
-
-
+ 
 }

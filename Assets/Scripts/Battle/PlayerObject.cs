@@ -17,9 +17,10 @@ public class PlayerObject : SpecObject
     public float mpMax = 1f;
     public float mp = 1f; // Energy to shoot and use skills.
     public float mpRegen = 0f;
-    
-    public Weapon[] weapons; // Weapons assignment.
-    public Device[] devices; // Skills assignment.
+
+    public GameObject[] weaponLocator; // Locations where weapons mount.
+
+    public GameObject[] targets;
 
     // Shield properties is here.
     public Shield shield;
@@ -29,10 +30,8 @@ public class PlayerObject : SpecObject
 
     public Vector2 v; // Velocity instead of RigidBody.velocity.
 
-    public Vector2[] weaponLocation; // The weapon mount point on plane.
-	
-	protected override void Update() 
-	{
+    protected override void Update()
+    {
         // Ship properties update...
         if (shield != null)
         {
@@ -76,7 +75,7 @@ public class PlayerObject : SpecObject
         // Player Shield Control...
         if (shield != null)
         {
-            if (Input.GetKeyDown(KeyCode.R)) shield.SwitchShield();
+            if (Input.GetKeyDown(KeyCode.T)) shield.SwitchShield();
         }
     }
 }

@@ -6,7 +6,7 @@ public class Shield : SpecObject
     public enum ShieldType { Round, Omni };
     public ShieldType shieldType;
     public bool shutdown = false; // Whether the shield is closed.
-    public bool broken = false; // Whether the shield can't be raise.
+    public bool broken = false; // Whether the shield can't be raised.
     public bool turnoff = false; // State description whether i should raise the shield.
     public float sp { get { return hp; } set { hp = value; } }
     public float spMax { get { return hpMax; } }

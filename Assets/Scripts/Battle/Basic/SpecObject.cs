@@ -8,7 +8,7 @@ public class SpecObject : MonoBehaviour
 {
     public float hpMax = 1f;
 
-    public float hp = 1f; // Strength/Health.
+    public float hp = 1f; // Strength / Health.
 
     // Regenurate rate.
     public float hpRegen = 0f;
