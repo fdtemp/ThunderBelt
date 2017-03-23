@@ -5,7 +5,7 @@ using System.Collections;
 /// Mount on player plane or ship.
 /// Defines All properties.
 /// </summary>
-public class PlayerObject : SpecObject
+public class Player : SpecObject
 {
     public float acceFront = 1.5f; // Acceleration front.
     public float acceBack = 1.0f; // Acceleration back.
@@ -32,6 +32,12 @@ public class PlayerObject : SpecObject
 
     protected override void Update()
     {
+        if (hp <= 0f)
+        {
+            Failed();
+            return;
+        }
+
         // Ship properties update...
         if (shield != null)
         {
@@ -77,5 +83,17 @@ public class PlayerObject : SpecObject
         {
             if (Input.GetKeyDown(KeyCode.T)) shield.SwitchShield();
         }
+    }
+
+    /// <summary>
+    /// Defines what to do when player plane is taken down.
+    /// Normally make a failed tag, destroy ships, and so on.
+    /// </summary>
+    void Failed()
+    {
+        // Notice we don't destroy this object directly,
+        // to avoid a large number of null-reference error.
+        //Destroy(this.gameObject);
+        this.gameObject.transform.position = new Vector3(0f,-999999999f,0f);
     }
 }

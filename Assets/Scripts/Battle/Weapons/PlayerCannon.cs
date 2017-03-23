@@ -2,6 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponStandardCannon : Weapon
+public class PlayerCannon : Weapon
 {
 }

@@ -16,8 +16,7 @@ public class Global : MonoBehaviour
         float flySpeed; // The speed camera flying with plane, used to calculated FX.
     };
     public static PlayerInfo playerInfo;
-
-
+    
 
 	void Awake()
 	{

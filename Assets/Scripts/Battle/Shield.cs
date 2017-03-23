@@ -10,7 +10,7 @@ public class Shield : SpecObject
     public bool turnoff = false; // State description whether i should raise the shield.
     public float sp { get { return hp; } set { hp = value; } }
     public float spMax { get { return hpMax; } }
-    public float spRegen = 10f;
+    public float spRegen { get { return hpRegen; } }
     public float resetTime = 5f;
     public float energyCost = 0f; // Opening a shield costs energy every second.
     public SpriteRenderer rd; // Renderer rendering this shield.
@@ -49,6 +49,7 @@ public class Shield : SpecObject
 
     /// <summary>
     /// It's overrided here to avoid direct change of hp and it's relative variable.
+    /// Also redefine the behaviour when hp(sp) is lower then 0.
     /// </summary>
     protected override void Update()
     {
@@ -57,6 +58,7 @@ public class Shield : SpecObject
             shutdown = true;
             broken = true;
             t = resetTime;
+            sp = 0f;
         }
 
         sp += spRegen * Time.deltaTime;

@@ -38,12 +38,28 @@ abstract public class Cannonball : MonoBehaviour
     void OnTriggerEnter2D(Collider2D x)
     {
         GameObject t = x.gameObject;
-        if (t.tag == "Ally") return;
+
+        // Should do nothing with the friendly.
+        if (this.gameObject.tag == "AllyCannonball")
+        {
+            if (t.tag == "Ally" || t.tag == "AllyCannonball" | t.tag == "Player") return;
+        }
+        else if (this.gameObject.tag == "EnemyCannonball")
+        {
+            if (t.tag == "Enemy" || t.tag == "EnemyCannonball") return;
+        }
+        else
+        {
+            Debug.Log("WARNING: Cannonball tag is not set properly : " + this.gameObject.name);
+            return;
+        }
 
         // Notice that all *can-be-hit* cannonball & missiles *should* mount a SpecObject.
         SpecObject s = t.GetComponent<SpecObject>();
         if (s == null) return;
 
         s.RecieveDamage(damageType, damage);
+
+        Destroy(this.gameObject);
     }
 }

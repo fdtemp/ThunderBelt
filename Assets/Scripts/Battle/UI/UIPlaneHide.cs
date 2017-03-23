@@ -14,7 +14,7 @@ public class UIPlaneHide : MonoBehaviour
 
     void Start()
     {
-        if (player == null) player = FindObjectOfType<PlayerObject>().gameObject;
+        if (player == null) player = FindObjectOfType<Player>().gameObject;
     }
 
     void Update()
