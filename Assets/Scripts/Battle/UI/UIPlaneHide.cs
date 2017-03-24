@@ -17,7 +17,7 @@ public class UIPlaneHide : MonoBehaviour
         if (player == null) player = FindObjectOfType<Player>().gameObject;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         float rate = Vector2.Distance(player.transform.position, this.gameObject.transform.position) / dist;
         if (rate > 1f) rate = 1f;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Mounted on an engine object with a line-renderer in it.
+/// **NOT COMPLETED**
 /// </summary>
 public class EngineTrail : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class EngineTrail : MonoBehaviour
     public float dt = 0.2f;
     float t = 0f;
 
-	void Update()
+	void FixedUpdate()
     {
         t -= Time.deltaTime;
         if (t <= 0f)

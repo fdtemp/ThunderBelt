@@ -19,7 +19,7 @@ public class SpecObject : MonoBehaviour
     /// Do this function every frame.
     /// All about Regenereation and so on.
     /// </summary>
-	virtual protected void Update()
+	virtual protected void FixedUpdate()
 	{
         if (hp < 0)
         {
@@ -27,7 +27,7 @@ public class SpecObject : MonoBehaviour
             Destroy(this.gameObject);
             return;
         }
-        hp += hpRegen * Time.deltaTime;
+        hp += hpRegen * Time.fixedDeltaTime;
         if (hp >= hpMax) hp = hpMax;
     }
 

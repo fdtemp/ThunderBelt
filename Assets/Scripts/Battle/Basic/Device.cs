@@ -25,7 +25,7 @@ abstract public class Device : MonoBehaviour
     protected float t = 0f; // Time counter.
     bool isPrepared { get { return t == 0f && player.mp >= mpCost; } }
 
-    virtual protected void Update()
+    virtual protected void FixedUpdate()
     {
         t -= Time.deltaTime;
         if (t <= 0f) t = 0f;

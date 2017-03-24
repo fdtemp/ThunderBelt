@@ -30,7 +30,7 @@ public class Player : SpecObject
 
     public Vector2 v; // Velocity instead of RigidBody.velocity.
 
-    protected override void Update()
+    protected override void FixedUpdate()
     {
         if (hp <= 0f)
         {
@@ -103,8 +103,8 @@ public class Player : SpecObject
         if (!shield.shutdown) return; // Shield will protect it from collide.
 
         // Colliding damage is defined here.
-        float dmgps = 1000;
-        float dmg = dmgps * Time.deltaTime;
+        //float dmgps = 1000;
+        float dmg = 600; //dmgps * Time.deltaTime;
         hp -= dmg;
         SpecObject s = x.gameObject.GetComponent<SpecObject>();
         if (s != null)

@@ -17,8 +17,7 @@ public class Shield : SpecObject
     public Collider2D cd; // Collider of this shield.
 
     float t = 0f;
-    float originalAlpha;
-
+    Color originalColor;
     void Start()
     {
         t = 0f;
@@ -34,7 +33,7 @@ public class Shield : SpecObject
             Debug.Log("WARNNING: Collider not assigned at : " +
                 this.gameObject.name + this.gameObject.transform.parent.gameObject.name);
         }
-        originalAlpha = rd.color.a;
+        originalColor = rd.color;
     }
 
     void TryRaiseShield()
@@ -53,7 +52,7 @@ public class Shield : SpecObject
     /// It's overrided here to avoid direct change of hp and it's relative variable.
     /// Also redefine the behaviour when hp(sp) is lower then 0.
     /// </summary>
-    protected override void Update()
+    protected override void FixedUpdate()
     {
         if (sp <= 0f) // Make shiled broken and shutdown it.
         {
@@ -63,7 +62,7 @@ public class Shield : SpecObject
             sp = 0f;
         }
 
-        sp += spRegen * Time.deltaTime;
+        sp += spRegen * Time.fixedDeltaTime;
         if (sp > spMax) sp = spMax;
 
         if (turnoff) TryCloseShield();
@@ -72,7 +71,7 @@ public class Shield : SpecObject
         // Do the shield reparing.
         if (broken)
         {
-            t -= Time.deltaTime;
+            t -= Time.fixedDeltaTime;
             if (t < 0f) t = 0f;
             if (t == 0f)
             {
@@ -90,15 +89,34 @@ public class Shield : SpecObject
         else
         {
             Color x = rd.color;
-            x.a = originalAlpha;
+            x.a = originalColor.a;
             rd.color = x;
         }
 
         if (shieldType == ShieldType.Round)
-            this.gameObject.transform.Rotate(0f, 0f, 30f * Time.deltaTime);
+            this.gameObject.transform.Rotate(0f, 0f, 30f * Time.fixedDeltaTime);
         // Effect changing.
         if (shutdown) cd.enabled = false;
         else cd.enabled = true;
+
+        // Make the shield red when damaged.
+        if (sp <= spMax * 0.5f)
+        {
+            float lim = spMax * 0.5f;
+            Color x = rd.color;
+            float rate = 1 - sp / lim;
+            x.r = Mathf.Min(1.0f, originalColor.r + 0.8f * rate);
+            x.a = Mathf.Min(1.0f, originalColor.a + 0.2f * rate);
+            x.g = Mathf.Max(0.0f, originalColor.g - 0.2f * rate);
+            x.b = Mathf.Max(0.0f, originalColor.b - 0.2f * rate);
+            rd.color = x;
+        }
+        else
+        {
+            Color x = rd.color;
+            x.r = originalColor.r;
+            rd.color = x;
+        }
 
     }
 
@@ -118,10 +136,10 @@ public class Shield : SpecObject
     void OnTriggerStay2D(Collider2D x)
     {
         if (x.gameObject.tag != "Enemy" && x.gameObject.tag != "Wreckage") return;
-        
+
         // Colliding damage is defined here.
-        float dmgps = 1500;
-        float dmg = dmgps * Time.deltaTime;
+        //float dmgps = 1500;
+        float dmg = 300; //dmgps * Time.fixedDeltaTime;
         sp -= dmg;
         SpecObject s = x.gameObject.GetComponent<SpecObject>();
         if (s != null)

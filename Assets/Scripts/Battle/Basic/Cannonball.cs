@@ -14,7 +14,7 @@ abstract public class Cannonball : MonoBehaviour
 
     float t = 0f;
 
-    void Update()
+    void FixedUpdate()
     { 
         t += Time.deltaTime;
         if (t > lifeTime) Destroy(this.gameObject);

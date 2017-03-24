@@ -10,7 +10,7 @@ abstract public class EnemyWeapon : MonoBehaviour
     public float cd = 1f;
 
     protected float t;
-    void Update()
+    void FixedUpdate()
     {
         t -= Time.deltaTime;
         if (t < 0f) t = 0f;
