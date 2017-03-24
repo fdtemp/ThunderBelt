@@ -1,25 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyCannon : EnemyWeapon
+
+/// <summary>
+/// Enemy weapons use some unique logic instead of player Device.
+/// </summary>
+abstract public class EnemyWeaponTurret : EnemyWeapon
 {
-    public override bool shouldFireNow { get { return true; } }
-    
-    /// <summary>
-    /// Default select player plane/ship.
-    /// </summary>
-    /// <returns>targets.</returns>
-    public override GameObject[] GetTargets()
-    {
-        if (targets == null || targets.Length == 0)
-        {
-            targets = new GameObject[1];
-            targets[0] = BattleManager.player;
-        }
-
-        return targets;
-    }
-
     /// <summary>
     /// Default direct cannonball aim to the player.
     /// </summary>
@@ -38,7 +26,7 @@ public class EnemyCannon : EnemyWeapon
         x.transform.position = this.gameObject.transform.position;
         // Source cannonball's direction is (and should be) always up.
         // Set the cannonball directing to the target.
-        Quaternion q = Quaternion.FromToRotation(Vector2.up, 
+        Quaternion q = Quaternion.FromToRotation(Vector2.up,
             t.transform.position - this.gameObject.transform.position);
         x.transform.rotation = q;
     }

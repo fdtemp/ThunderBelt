@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-/// <summary>
-/// Enemy weapons use some unique logic instead of player Device.
-/// </summary>
-abstract public class EnemyWeapon : MonoBehaviour
+abstract public class EnemyWeapon : MonoBehaviour 
 {
+
     public GameObject source;
     public GameObject[] targets;
     public float cd = 1f;
@@ -27,7 +24,30 @@ abstract public class EnemyWeapon : MonoBehaviour
 
     // Custom functions below to control enemy weapon behaviour.
     // DONOT use any other functions.
-    virtual public bool shouldFireNow { get { return true; } }
-    abstract public GameObject[] GetTargets();
+    virtual public bool shouldFireNow
+    {
+        get
+        {
+            Vector2 v = Camera.main.WorldToViewportPoint(this.gameObject.transform.position);
+            return v.x <= 1f && v.x >= -1f && v.y <= 1f && v.y >= -1f;
+        }
+    }
+
     abstract public void Launch(GameObject[] targets);
+
+    /// <summary>
+    /// Default select player plane/ship.
+    /// </summary>
+    /// <returns>targets.</returns>
+    virtual public GameObject[] GetTargets()
+    {
+        if (targets == null || targets.Length == 0)
+        {
+            targets = new GameObject[1];
+            targets[0] = BattleManager.playerObject;
+        }
+
+        return targets;
+    }
+
 }

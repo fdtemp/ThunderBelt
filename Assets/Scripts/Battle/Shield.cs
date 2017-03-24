@@ -17,6 +17,7 @@ public class Shield : SpecObject
     public Collider2D cd; // Collider of this shield.
 
     float t = 0f;
+    float originalAlpha;
 
     void Start()
     {
@@ -33,6 +34,7 @@ public class Shield : SpecObject
             Debug.Log("WARNNING: Collider not assigned at : " +
                 this.gameObject.name + this.gameObject.transform.parent.gameObject.name);
         }
+        originalAlpha = rd.color.a;
     }
 
     void TryRaiseShield()
@@ -88,7 +90,7 @@ public class Shield : SpecObject
         else
         {
             Color x = rd.color;
-            x.a = 1f;
+            x.a = originalAlpha;
             rd.color = x;
         }
 
@@ -106,5 +108,29 @@ public class Shield : SpecObject
     public void SwitchShield()
     {
         turnoff = !turnoff;
+    }
+
+
+    /// <summary>
+    /// This function is for dealing with shield-ship or shield-wreckage collides.
+    /// </summary>
+    /// <param name="x"></param>
+    void OnTriggerStay2D(Collider2D x)
+    {
+        if (x.gameObject.tag != "Enemy" && x.gameObject.tag != "Wreckage") return;
+        
+        // Colliding damage is defined here.
+        float dmgps = 1500;
+        float dmg = dmgps * Time.deltaTime;
+        sp -= dmg;
+        SpecObject s = x.gameObject.GetComponent<SpecObject>();
+        if (s != null)
+        {
+            s.RecieveDamage(DamageType.Energy, dmg);
+        }
+
+        // **No physics effects yet.**
+
+        // Shuold have some special FX when colliding.
     }
 }

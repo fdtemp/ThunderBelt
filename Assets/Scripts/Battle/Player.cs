@@ -13,7 +13,7 @@ public class Player : SpecObject
     public float maxSpeedFront = 2.0f;
     public float maxSpeedBack = 1.5f;
     public float maxSpeedGlide = 2.0f;
-    
+
     public float mpMax = 1f;
     public float mp = 1f; // Energy to shoot and use skills.
     public float mpRegen = 0f;
@@ -94,6 +94,24 @@ public class Player : SpecObject
         // Notice we don't destroy this object directly,
         // to avoid a large number of null-reference error.
         //Destroy(this.gameObject);
-        this.gameObject.transform.position = new Vector3(0f,-999999999f,0f);
+        this.gameObject.transform.position = new Vector3(0f, -999999999f, 0f);
+    }
+
+    void OnTriggerStay2D(Collider2D x)
+    {
+        if (x.gameObject.tag != "Enemy" && x.gameObject.tag != "Wreckage") return;
+        if (!shield.shutdown) return; // Shield will protect it from collide.
+
+        // Colliding damage is defined here.
+        float dmgps = 1000;
+        float dmg = dmgps * Time.deltaTime;
+        hp -= dmg;
+        SpecObject s = x.gameObject.GetComponent<SpecObject>();
+        if (s != null)
+        {
+            s.RecieveDamage(DamageType.Energy, dmg * 2f);
+        }
+
+        // **No physics effects yet.**
     }
 }
