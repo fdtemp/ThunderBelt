@@ -3,38 +3,13 @@ using System.Collections;
 
 public class Global : MonoBehaviour 
 {
-    public struct PlayerInfo
-    {
-        string planeName;
-        string planeType;
+    public static long resources;
 
-        long resources;
+    public static float flySpeed; // The speed *camera* flying with plane, used to calculated FX.
 
-        string[] weapons;
-        string[] devices;
-
-        float flySpeed; // The speed camera flying with plane, used to calculated FX.
-    };
-    public static PlayerInfo playerInfo;
-    
-
-	void Awake()
-	{
-	
-	}
-	
-	void Start() 
-	{
-	    
-	}
-	
-	void Update() 
-	{
-	
-	}
-	
-	void LateUpdate()
-	{
-	
-	}
+    // Notice that these should be references to *prefebs*.
+    // Should be assigned by reading the save or by the selecting interface.
+    public static GameObject wing = null;
+    public static GameObject[] weapons = new GameObject[4];
+    public static GameObject[] devices = new GameObject[4];
 }
