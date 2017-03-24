@@ -44,7 +44,7 @@ abstract public class EnemyWeapon : MonoBehaviour
         if (targets == null || targets.Length == 0)
         {
             targets = new GameObject[1];
-            targets[0] = BattleManager.playerObject;
+            targets[0] = BattleManager.player;
         }
 
         return targets;

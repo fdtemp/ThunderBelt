@@ -127,6 +127,9 @@ public class Shield : SpecObject
         if (s != null)
         {
             s.RecieveDamage(DamageType.Energy, dmg);
+            Player player = this.transform.parent.gameObject.GetComponent<Player>();
+            player.v = (Vector2)(this.gameObject.transform.parent.position -
+                x.gameObject.transform.position).normalized;
         }
 
         // **No physics effects yet.**

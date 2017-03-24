@@ -110,6 +110,9 @@ public class Player : SpecObject
         if (s != null)
         {
             s.RecieveDamage(DamageType.Energy, dmg * 2f);
+            v = (Vector2)(this.gameObject.transform.position -
+                x.gameObject.transform.position).normalized * 2f;
+
         }
 
         // **No physics effects yet.**
