@@ -41,9 +41,9 @@ public class Player : SpecObject
         // Ship properties update...
         if (shield != null)
         {
-            if (!shield.shutdown) mp -= shield.energyCost * Time.deltaTime;
+            if (!shield.shutdown) mp -= shield.energyCost * Time.fixedDeltaTime;
         }
-        mp += mpRegen * Time.deltaTime;
+        mp += mpRegen * Time.fixedDeltaTime;
         if (mp >= mpMax) mp = mpMax;
 
         // Player ship/plane control...
@@ -66,7 +66,7 @@ public class Player : SpecObject
         else // Try to stop glide.
             a.y = v.y > 0f ? -acceBack : v.y < 0f ? acceFront : 0f;
 
-        Vector2 dv = a * Time.deltaTime; // Delta v.
+        Vector2 dv = a * Time.fixedDeltaTime; // Delta v.
 
         if (dv.x + v.x > maxSpeedGlide) dv.x = maxSpeedGlide - v.x;
         if (dv.x + v.x < -maxSpeedGlide) dv.x = -maxSpeedGlide - v.x;
@@ -74,7 +74,7 @@ public class Player : SpecObject
         if (dv.y + v.y > maxSpeedFront) dv.y = maxSpeedFront - v.y;
         if (dv.y + v.y < -maxSpeedBack) dv.y = -maxSpeedBack - v.y;
 
-        this.gameObject.transform.Translate(dv * Time.deltaTime * 0.5f + v * Time.deltaTime);
+        this.gameObject.transform.Translate(dv * Time.fixedDeltaTime * 0.5f + v * Time.fixedDeltaTime);
         v += dv;
 
 
@@ -104,7 +104,7 @@ public class Player : SpecObject
 
         // Colliding damage is defined here.
         //float dmgps = 1000;
-        float dmg = 600; //dmgps * Time.deltaTime;
+        float dmg = 600; //dmgps * Time.fixedDeltaTime;
         hp -= dmg;
         SpecObject s = x.gameObject.GetComponent<SpecObject>();
         if (s != null)

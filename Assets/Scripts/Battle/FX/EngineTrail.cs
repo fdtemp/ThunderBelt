@@ -25,7 +25,7 @@ public class EngineTrail : MonoBehaviour
 
 	void FixedUpdate()
     {
-        t -= Time.deltaTime;
+        t -= Time.fixedDeltaTime;
         if (t <= 0f)
         {
             

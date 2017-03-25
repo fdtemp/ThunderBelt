@@ -12,7 +12,7 @@ abstract public class EnemyWeapon : MonoBehaviour
     protected float t;
     void FixedUpdate()
     {
-        t -= Time.deltaTime;
+        t -= Time.fixedDeltaTime;
         if (t < 0f) t = 0f;
 
         if (t == 0 && shouldFireNow)

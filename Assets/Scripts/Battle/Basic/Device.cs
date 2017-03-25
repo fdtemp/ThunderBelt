@@ -27,7 +27,7 @@ abstract public class Device : MonoBehaviour
 
     virtual protected void FixedUpdate()
     {
-        t -= Time.deltaTime;
+        t -= Time.fixedDeltaTime;
         if (t <= 0f) t = 0f;
 
         if (Input.GetKey(keyBind) && isPrepared)

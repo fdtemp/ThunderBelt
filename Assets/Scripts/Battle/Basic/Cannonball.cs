@@ -16,7 +16,7 @@ abstract public class Cannonball : MonoBehaviour
 
     void FixedUpdate()
     { 
-        t += Time.deltaTime;
+        t += Time.fixedDeltaTime;
         if (t > lifeTime) Destroy(this.gameObject);
         Move();
     }
@@ -27,7 +27,7 @@ abstract public class Cannonball : MonoBehaviour
     /// </summary>
     virtual protected void Move()
     {
-        this.gameObject.transform.Translate(0f, speed * Time.deltaTime, 0f);
+        this.gameObject.transform.Translate(0f, speed * Time.fixedDeltaTime, 0f);
     }
 
     virtual public void SetTarget(GameObject[] target) // For tracing missiles and projectiles.

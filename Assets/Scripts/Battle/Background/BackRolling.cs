@@ -9,7 +9,7 @@ public class BackRolling : MonoBehaviour
     public float bottomEdge = -20f;
     void FixedUpdate()
     {
-        Vector2 loc = (Vector2)this.gameObject.transform.position + Vector2.down * speed * Time.deltaTime;
+        Vector2 loc = (Vector2)this.gameObject.transform.position + Vector2.down * speed * Time.fixedDeltaTime;
         if (loc.y > topEdge) loc.y = loc.y - topEdge + bottomEdge;
         if(loc.y < bottomEdge) loc.y = loc.y + topEdge - bottomEdge;
         this.gameObject.transform.position = loc;
