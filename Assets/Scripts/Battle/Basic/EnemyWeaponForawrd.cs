@@ -8,6 +8,8 @@ using UnityEngine;
 /// </summary>
 abstract public class EnemyWeaponForward : EnemyWeapon
 {
+    public AudioSource au;
+
     /// <summary>
     /// Default direct cannonball aim to the player.
     /// </summary>
@@ -30,5 +32,8 @@ abstract public class EnemyWeaponForward : EnemyWeapon
         // Set the cannonball directing to direct down.
         Quaternion q = Quaternion.FromToRotation(Vector2.up, Vector2.down);
         x.transform.rotation = q;
+
+        if (au != null) au.Play();
+
     }
 }

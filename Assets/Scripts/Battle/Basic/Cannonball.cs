@@ -13,6 +13,7 @@ abstract public class Cannonball : MonoBehaviour
     public DamageType damageType = DamageType.Energy;
 
     float t = 0f;
+    bool exploded = false;
 
     void FixedUpdate()
     { 
@@ -54,12 +55,23 @@ abstract public class Cannonball : MonoBehaviour
             return;
         }
 
+        if (exploded) return; // This gameobjcet will be destroyed when timeout in FixedUpdate.
+
+
         // Notice that all *can-be-hit* cannonball & missiles *should* mount a SpecObject.
         SpecObject s = t.GetComponent<SpecObject>();
         if (s == null) return;
 
         s.RecieveDamage(damageType, damage);
 
-        Destroy(this.gameObject);
+        this.GetComponent<AudioSource>().Play();
+
+        // Not to destroy this object immediatly for playing sounds.
+        //Destroy(this.gameObject);
+        Collider2D cd = this.gameObject.GetComponent<Collider2D>();
+        if (cd != null) Destroy(cd);
+        SpriteRenderer rd = this.gameObject.GetComponent<SpriteRenderer>();
+        if (rd != null) Destroy(rd);
+        exploded = true;
     }
 }

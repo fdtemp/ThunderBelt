@@ -28,7 +28,15 @@ public class Player : SpecObject
     public float spMax { get { return shield.spMax; } }
     public float spRegen { get { return shield.spRegen; } }
 
-    public Vector2 v; // Velocity instead of RigidBody.velocity.
+    Rigidbody2D rd;
+
+    //public Vector2 v; // Velocity instead of RigidBody.velocity.
+    public Vector2 v { get { return rd.velocity; } set { rd.velocity = value; } }
+
+    void Start()
+    {
+        rd = this.gameObject.GetComponent<Rigidbody2D>();
+    }
 
     protected override void FixedUpdate()
     {
@@ -57,7 +65,7 @@ public class Player : SpecObject
         else if (!lc && rc) // Accelerate to the right.
             a.x = acceGlide;
         else // Try to stop glide.
-            a.x = (v.x != 0f ? -Mathf.Sign(v.x) * acceGlide : 0f);
+            a.x = v.x > 0f ? -acceGlide : v.x < 0f ? acceGlide : 0f;
 
         if (bc && !fc) // Accelerate to the back.
             a.y = -acceBack;
@@ -68,16 +76,15 @@ public class Player : SpecObject
 
         Vector2 dv = a * Time.fixedDeltaTime; // Delta v.
 
-        if (dv.x + v.x > maxSpeedGlide) dv.x = maxSpeedGlide - v.x;
-        if (dv.x + v.x < -maxSpeedGlide) dv.x = -maxSpeedGlide - v.x;
-
-        if (dv.y + v.y > maxSpeedFront) dv.y = maxSpeedFront - v.y;
-        if (dv.y + v.y < -maxSpeedBack) dv.y = -maxSpeedBack - v.y;
-
         this.gameObject.transform.Translate(dv * Time.fixedDeltaTime * 0.5f + v * Time.fixedDeltaTime);
         v += dv;
 
+        if (v.x > maxSpeedGlide) v = new Vector2(maxSpeedGlide, v.y);
+        if (v.x < -maxSpeedGlide) v = new Vector2(-maxSpeedGlide, v.y);
+        if (v.y > maxSpeedFront) v = new Vector2(v.x, maxSpeedFront);
+        if (v.y < -maxSpeedBack) v = new Vector2(v.x, -maxSpeedBack);
 
+            
         // Player Shield Control...
         if (shield != null)
         {

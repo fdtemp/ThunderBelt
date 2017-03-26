@@ -10,6 +10,8 @@ abstract public class Weapon : Device
     public GameObject source = null; // Cannonball source.
     public GameObject[] fireLocator = null;
 
+    public AudioClip au;
+
     /// <summary>
     /// Deal with launching cannonball and missiles.
     /// Those mp decreasing and cd is deat *after* this function returns.
@@ -26,8 +28,13 @@ abstract public class Weapon : Device
                 return;
             }
 
+
+            AudioSource a = fireLocator[i].GetComponent<AudioSource>();
+            if (a != null) { a.clip = au;  a.Play(); }
+
             x.transform.position = fireLocator[i].transform.position;
             x.tag = "AllyCannonball";
         }
+        
     }
 }

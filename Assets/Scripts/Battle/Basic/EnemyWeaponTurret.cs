@@ -8,6 +8,8 @@ using UnityEngine;
 /// </summary>
 abstract public class EnemyWeaponTurret : EnemyWeapon
 {
+    public AudioSource au;
+
     /// <summary>
     /// Default direct cannonball aim to the player.
     /// </summary>
@@ -29,5 +31,8 @@ abstract public class EnemyWeaponTurret : EnemyWeapon
         Quaternion q = Quaternion.FromToRotation(Vector2.up,
             t.transform.position - this.gameObject.transform.position);
         x.transform.rotation = q;
+
+        if (au != null) au.Play();
+
     }
 }
