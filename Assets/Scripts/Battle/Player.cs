@@ -84,12 +84,6 @@ public class Player : SpecObject
         if (v.y > maxSpeedFront) v = new Vector2(v.x, maxSpeedFront);
         if (v.y < -maxSpeedBack) v = new Vector2(v.x, -maxSpeedBack);
 
-            
-        // Player Shield Control...
-        if (shield != null)
-        {
-            if (Input.GetKeyDown(KeyCode.T)) shield.SwitchShield();
-        }
     }
 
     /// <summary>

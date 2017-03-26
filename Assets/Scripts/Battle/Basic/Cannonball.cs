@@ -11,6 +11,7 @@ abstract public class Cannonball : MonoBehaviour
     public float lifeTime = 20f;
     public float speed = 1.0f;
     public DamageType damageType = DamageType.Energy;
+    public GameObject explodeFX;
 
     float t = 0f;
     bool exploded = false;
@@ -73,5 +74,22 @@ abstract public class Cannonball : MonoBehaviour
         SpriteRenderer rd = this.gameObject.GetComponent<SpriteRenderer>();
         if (rd != null) Destroy(rd);
         exploded = true;
+
+
+        if (explodeFX != null)
+        {
+            GameObject fx = Instantiate(explodeFX);
+            fx.transform.position = this.gameObject.transform.position;
+            Flasher fl = fx.GetComponent<Flasher>();
+            if (fl != null)
+            {
+                Vector3 dir;
+                float a;
+                this.gameObject.transform.rotation.ToAngleAxis(out a, out dir);
+                if (dir.z < 0) { dir = -dir; a = - a; }
+                fl.baseSpeed.y = Mathf.Min(Mathf.Cos(a * Mathf.Deg2Rad) * speed, 0f);
+                fl.baseSpeed.x = - Mathf.Sin(a * Mathf.Deg2Rad) * speed;
+            }
+        }
     }
 }

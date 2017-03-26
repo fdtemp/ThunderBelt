@@ -15,6 +15,7 @@ public class Shield : SpecObject
     public float energyCost = 0f; // Opening a shield costs energy every second.
     public SpriteRenderer rd; // Renderer rendering this shield.
     public Collider2D cd; // Collider of this shield.
+    public KeyCode keyBind;
 
     float t = 0f;
     Color originalColor;
@@ -54,6 +55,11 @@ public class Shield : SpecObject
     /// </summary>
     protected override void FixedUpdate()
     {
+        // Player Shield Control...
+        if (keyBind != KeyCode.None)
+            if (Input.GetKeyDown(keyBind)) SwitchShield();
+
+
         if (sp <= 0f) // Make shiled broken and shutdown it.
         {
             shutdown = true;
@@ -62,13 +68,14 @@ public class Shield : SpecObject
             sp = 0f;
         }
 
+        // Regens...
         sp += spRegen * Time.fixedDeltaTime;
         if (sp > spMax) sp = spMax;
 
         if (turnoff) TryCloseShield();
         else TryRaiseShield();
 
-        // Do the shield reparing.
+        // Do the shield reparing...
         if (broken)
         {
             t -= Time.fixedDeltaTime;
@@ -79,27 +86,17 @@ public class Shield : SpecObject
             }
         }
 
-        // Vision changing.
-        if (shutdown)
-        {
-            Color x = rd.color;
-            x.a = 0f;
-            rd.color = x;
-        }
-        else
-        {
-            Color x = rd.color;
-            x.a = originalColor.a;
-            rd.color = x;
-        }
+        // Vision changing...
+        if (shutdown) rd.enabled = false;
+        else rd.enabled = true;
 
         if (shieldType == ShieldType.Round)
             this.gameObject.transform.Rotate(0f, 0f, 30f * Time.fixedDeltaTime);
-        // Effect changing.
+        // Effect changing...
         if (shutdown) cd.enabled = false;
         else cd.enabled = true;
 
-        // Make the shield red when damaged.
+        // Make the shield red when damaged...
         if (sp <= spMax * 0.5f)
         {
             float lim = spMax * 0.5f;

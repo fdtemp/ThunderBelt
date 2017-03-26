@@ -6,7 +6,7 @@ public class Global
 {
     public static long resources;
 
-    public static float flySpeed; // The speed *camera* flying with plane, used to calculated FX.
+    public static float flySpeed = 8.0f; // The speed *camera* flying with plane, used to calculated FX.
 
     // Notice that these should be references to *prefebs*.
     // Should be assigned by reading the save or by the selecting interface.
@@ -33,8 +33,8 @@ public class Global
             inp.Replace("\t", "");
             int ct = 0;
             for (; ct != inp.Length && inp[ct] != '='; ct++) ;
-            string name = inp.Substring(0, ct);
-            string value = inp.Substring(ct+1);
+            //string name = inp.Substring(0, ct);
+            //string value = inp.Substring(ct+1);
         }
     }
 
