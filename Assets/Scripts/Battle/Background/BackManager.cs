@@ -22,7 +22,7 @@ public class BackManager : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            float rate = Mathf.Sqrt(Random.Range(minSize, maxSize));
+            float rate = Mathf.Pow(Random.Range(minSize, maxSize), 0.3f);
             float size = rate * maxScale;
             float speed = (1f - rate) * maxSpeed;
             GameObject deco = Instantiate(sourceDeco, this.gameObject.transform);

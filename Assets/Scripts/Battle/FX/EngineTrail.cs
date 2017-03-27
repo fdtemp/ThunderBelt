@@ -8,11 +8,12 @@ using UnityEngine;
 /// </summary>
 public class EngineTrail : MonoBehaviour
 {
-    LineRenderer rd;
+    MeshRenderer rd;
+
 
 	void Start()
     {
-        rd = this.gameObject.GetComponent<LineRenderer>();
+        rd = this.gameObject.GetComponent<MeshRenderer>();
         if (rd == null) 
         {
             Debug.Log("WARNING: Engine component don't have a line renderer : " + this.gameObject.name);
@@ -26,10 +27,11 @@ public class EngineTrail : MonoBehaviour
 	void FixedUpdate()
     {
         t -= Time.fixedDeltaTime;
-        if (t <= 0f)
-        {
-            
-            t += dt;
-        }
+        if (t <= 0f) t += dt;
+
+        // Add a node every d frames...
+        
+
+
 	}
 }

@@ -4,6 +4,7 @@ using System.Collections;
 using System.IO;
 public class Global
 {
+
     public static long resources;
 
     public static float flySpeed = 8.0f; // The speed *camera* flying with plane, used to calculated FX.
@@ -37,5 +38,4 @@ public class Global
             //string value = inp.Substring(ct+1);
         }
     }
-
 }

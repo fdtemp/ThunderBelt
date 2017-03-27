@@ -11,10 +11,10 @@ abstract public class Cannonball : MonoBehaviour
     public float lifeTime = 20f;
     public float speed = 1.0f;
     public DamageType damageType = DamageType.Energy;
-    public GameObject explodeFX;
+    public GameObject[] explodeFX;
 
     float t = 0f;
-    bool exploded = false;
+    bool hitted = false;
 
     void FixedUpdate()
     { 
@@ -29,6 +29,18 @@ abstract public class Cannonball : MonoBehaviour
     /// </summary>
     virtual protected void Move()
     {
+        // 8 : PlayerObject layer.
+        // 9 : EnemyObject layer.
+        int layer = this.gameObject.tag.Contains("Ally") ? 9 : 8;
+        RaycastHit2D rc = Physics2D.Raycast(
+            this.gameObject.transform.position, Vector2.up, 1e4f, layer);
+
+        if (rc.collider != null && rc.distance < speed * Time.fixedDeltaTime)
+        {
+            Debug.Log(rc.collider);
+            Hit(rc.collider);
+        }
+
         this.gameObject.transform.Translate(0f, speed * Time.fixedDeltaTime, 0f);
     }
 
@@ -38,6 +50,9 @@ abstract public class Cannonball : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D x)
+    { Hit(x); }
+
+    void Hit(Collider2D x)
     {
         GameObject t = x.gameObject;
 
@@ -56,7 +71,7 @@ abstract public class Cannonball : MonoBehaviour
             return;
         }
 
-        if (exploded) return; // This gameobjcet will be destroyed when timeout in FixedUpdate.
+        if (hitted) return; // This gameobjcet will be destroyed when timeout in FixedUpdate.
 
 
         // Notice that all *can-be-hit* cannonball & missiles *should* mount a SpecObject.
@@ -73,22 +88,29 @@ abstract public class Cannonball : MonoBehaviour
         if (cd != null) Destroy(cd);
         SpriteRenderer rd = this.gameObject.GetComponent<SpriteRenderer>();
         if (rd != null) Destroy(rd);
-        exploded = true;
+        hitted = true;
 
-
+        // Maintain FX objects...
         if (explodeFX != null)
         {
-            GameObject fx = Instantiate(explodeFX);
-            fx.transform.position = this.gameObject.transform.position;
-            Flasher fl = fx.GetComponent<Flasher>();
-            if (fl != null)
+            // Maintain direction...
+            Vector3 dir;
+            float a;
+            this.gameObject.transform.rotation.ToAngleAxis(out a, out dir);
+            if (dir.z < 0) { dir = -dir; a = -a; }
+            Vector2 vdir;
+            vdir.y = Mathf.Min(Mathf.Cos(a * Mathf.Deg2Rad) * speed, 0f);
+            vdir.x = -Mathf.Sin(a * Mathf.Deg2Rad) * speed;
+            if (vdir.magnitude > Global.flySpeed * 0.5f)
+                vdir = vdir.normalized * Global.flySpeed * 0.5f;
+
+            // Create and assign fx objects...
+            for (int i = 0; i < explodeFX.Length; i++)
             {
-                Vector3 dir;
-                float a;
-                this.gameObject.transform.rotation.ToAngleAxis(out a, out dir);
-                if (dir.z < 0) { dir = -dir; a = - a; }
-                fl.baseSpeed.y = Mathf.Min(Mathf.Cos(a * Mathf.Deg2Rad) * speed, 0f);
-                fl.baseSpeed.x = - Mathf.Sin(a * Mathf.Deg2Rad) * speed;
+                GameObject fx = Instantiate(explodeFX[i]);
+                fx.transform.position = this.gameObject.transform.position;
+                Flasher fl = fx.GetComponent<Flasher>();
+                if (fl != null) fl.baseSpeed = vdir;
             }
         }
     }

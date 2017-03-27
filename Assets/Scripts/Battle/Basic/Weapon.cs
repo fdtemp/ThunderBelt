@@ -34,6 +34,7 @@ abstract public class Weapon : Device
 
             x.transform.position = fireLocator[i].transform.position;
             x.tag = "AllyCannonball";
+            x.layer = 8; // UserLayer PlayerObject
         }
         
     }

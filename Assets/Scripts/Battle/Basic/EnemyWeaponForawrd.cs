@@ -27,6 +27,7 @@ abstract public class EnemyWeaponForward : EnemyWeapon
         GameObject x = Instantiate(source);
         x.tag = "EnemyCannonball";
         x.transform.position = this.gameObject.transform.position;
+        x.layer = 9; // UserLayer EnemyObject.
 
         // Source cannonball's direction is (and should be) always up.
         // Set the cannonball directing to direct down.
