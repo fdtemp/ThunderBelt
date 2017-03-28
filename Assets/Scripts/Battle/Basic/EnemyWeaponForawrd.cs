@@ -31,7 +31,7 @@ abstract public class EnemyWeaponForward : EnemyWeapon
 
         // Source cannonball's direction is (and should be) always up.
         // Set the cannonball directing to direct down.
-        Quaternion q = Quaternion.FromToRotation(Vector2.up, Vector2.down);
+        Quaternion q = Quaternion.Euler(0f, 0f ,180f);
         x.transform.rotation = q;
 
         if (au != null) au.Play();

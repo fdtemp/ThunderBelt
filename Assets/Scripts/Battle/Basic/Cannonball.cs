@@ -17,6 +17,30 @@ abstract public class Cannonball : MonoBehaviour
     float t = 0f;
     bool hitted = false;
 
+    void Update()
+    {
+        int layer = (this.gameObject.tag.Contains("Ally") || this.gameObject.tag == "Player") ? 
+            LayerMask.GetMask("EnemyObject"): LayerMask.GetMask("PlayerObject"); // Binary mask!
+
+        Vector2 dir;
+        {
+            Vector3 dd; float al;
+            this.gameObject.transform.rotation.ToAngleAxis(out al, out dd);
+            if (dd.z < 0) { dd = -dd; al = -al; }
+            al += 90;
+            dir.x = Mathf.Cos(al * Mathf.Deg2Rad);
+            dir.y = Mathf.Sin(al * Mathf.Deg2Rad);
+        }
+        
+        RaycastHit2D rc = Physics2D.Raycast(this.gameObject.transform.position, dir, 1e4f, layer);
+        
+        if (rc.collider != null && rc.distance < speed * Time.deltaTime * 1.1f)
+        {
+            if (rc.collider.GetComponent<SpecObject>() != null)
+                Hit(rc.collider, rc.point);
+        }
+    }
+
     void FixedUpdate()
     { 
         t += Time.fixedDeltaTime;
@@ -30,18 +54,6 @@ abstract public class Cannonball : MonoBehaviour
     /// </summary>
     virtual protected void Move()
     {
-        // 8 : PlayerObject layer.
-        // 9 : EnemyObject layer.
-        int layer = this.gameObject.tag.Contains("Ally") ? 9 : 8;
-        RaycastHit2D rc = Physics2D.Raycast(
-            this.gameObject.transform.position, Vector2.up, 1e4f, layer);
-
-        if (rc.collider != null && rc.distance < speed * Time.fixedDeltaTime)
-        {
-            Debug.Log(rc.collider);
-            Hit(rc.collider, rc.point);
-        }
-
         this.gameObject.transform.Translate(0f, speed * Time.fixedDeltaTime, 0f);
     }
 
@@ -71,7 +83,7 @@ abstract public class Cannonball : MonoBehaviour
         {
             if (t.tag == "Enemy" || t.tag == "EnemyCannonball") return;
         }
-        else
+        else if(this.gameObject.tag != "UsedCannonball")
         {
             Debug.Log("WARNING: Cannonball tag is not set properly : " + this.gameObject.name);
             return;
@@ -94,6 +106,7 @@ abstract public class Cannonball : MonoBehaviour
         if (cd != null) Destroy(cd);
         SpriteRenderer rd = this.gameObject.GetComponent<SpriteRenderer>();
         if (rd != null) Destroy(rd);
+        this.gameObject.tag = "UsedCannonball";
         hitted = true;
 
         // FX objects...
@@ -127,6 +140,23 @@ abstract public class Cannonball : MonoBehaviour
             {
                 GameObject pc = Instantiate(explodeParticles[i]);
                 pc.transform.position = loc;
+                // Turn the color to red as enemies' ship damaged.
+
+                SpriteRenderer prd = pc.GetComponent<SpriteRenderer>();
+                Shield sd = x.gameObject.GetComponent<Shield>();
+                if (prd != null && sd == null)
+                {
+                    SpriteRenderer spr = s.gameObject.GetComponent<SpriteRenderer>();
+                    if (spr != null)
+                    {
+                        float hrate = 0.5f + 0.5f * s.hp / s.hpMax;
+                        prd.color = new Color(
+                            spr.color.r,
+                            spr.color.g * hrate,
+                            spr.color.b * hrate,
+                            spr.color.a);
+                    }
+                }
             }
         }
     }
