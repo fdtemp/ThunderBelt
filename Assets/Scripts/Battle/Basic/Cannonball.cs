@@ -12,6 +12,7 @@ abstract public class Cannonball : MonoBehaviour
     public float speed = 1.0f;
     public DamageType damageType = DamageType.Energy;
     public GameObject[] explodeFX;
+    public GameObject[] explodeParticles;
 
     float t = 0f;
     bool hitted = false;
@@ -38,7 +39,7 @@ abstract public class Cannonball : MonoBehaviour
         if (rc.collider != null && rc.distance < speed * Time.fixedDeltaTime)
         {
             Debug.Log(rc.collider);
-            Hit(rc.collider);
+            Hit(rc.collider, rc.point);
         }
 
         this.gameObject.transform.Translate(0f, speed * Time.fixedDeltaTime, 0f);
@@ -50,9 +51,14 @@ abstract public class Cannonball : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D x)
-    { Hit(x); }
+    { Hit(x, this.gameObject.transform.position); }
 
-    void Hit(Collider2D x)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="loc">The correct hit location.</param>
+    void Hit(Collider2D x, Vector2 loc)
     {
         GameObject t = x.gameObject;
 
@@ -90,7 +96,7 @@ abstract public class Cannonball : MonoBehaviour
         if (rd != null) Destroy(rd);
         hitted = true;
 
-        // Maintain FX objects...
+        // FX objects...
         if (explodeFX != null)
         {
             // Maintain direction...
@@ -108,9 +114,19 @@ abstract public class Cannonball : MonoBehaviour
             for (int i = 0; i < explodeFX.Length; i++)
             {
                 GameObject fx = Instantiate(explodeFX[i]);
-                fx.transform.position = this.gameObject.transform.position;
+                fx.transform.position = loc;
                 Flasher fl = fx.GetComponent<Flasher>();
                 if (fl != null) fl.baseSpeed = vdir;
+            }
+        }
+
+        // particle objects...
+        if (explodeParticles != null)
+        {
+            for (int i = 0; i < explodeParticles.Length; i++)
+            {
+                GameObject pc = Instantiate(explodeParticles[i]);
+                pc.transform.position = loc;
             }
         }
     }

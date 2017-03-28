@@ -91,7 +91,11 @@ public class Shield : SpecObject
         else rd.enabled = true;
 
         if (shieldType == ShieldType.Round)
-            this.gameObject.transform.Rotate(0f, 0f, 30f * Time.fixedDeltaTime);
+            this.gameObject.transform.localRotation =
+                this.gameObject.transform.localRotation *
+                Quaternion.Euler(0f, 0f, 30f * Time.deltaTime);
+        
+
         // Effect changing...
         if (shutdown) cd.enabled = false;
         else cd.enabled = true;
@@ -114,6 +118,8 @@ public class Shield : SpecObject
             x.r = originalColor.r;
             rd.color = x;
         }
+        
+
 
     }
 
@@ -143,6 +149,7 @@ public class Shield : SpecObject
         {
             s.RecieveDamage(DamageType.Energy, dmg);
             Player player = this.transform.parent.gameObject.GetComponent<Player>();
+            Debug.Log(player.v);
             player.v = (Vector2)(this.gameObject.transform.parent.position -
                 x.gameObject.transform.position).normalized;
         }

@@ -22,6 +22,10 @@ public class Player : SpecObject
 
     public GameObject[] targets;
 
+    public GameObject[] deadFX;
+
+    public bool shotdown = false;
+
     // Shield properties is here.
     public Shield shield;
     public float sp { get { return shield.sp; } }
@@ -30,8 +34,8 @@ public class Player : SpecObject
 
     Rigidbody2D rd;
 
-    //public Vector2 v; // Velocity instead of RigidBody.velocity.
-    public Vector2 v { get { return rd.velocity; } set { rd.velocity = value; } }
+    public Vector2 v; // Velocity instead of RigidBody.velocity.
+    //public Vector2 v { get { return rd.velocity; } set { rd.velocity = value; } }
 
     void Start()
     {
@@ -60,29 +64,50 @@ public class Player : SpecObject
         bool rc = Input.GetKey(KeyCode.RightArrow);
         bool bc = Input.GetKey(KeyCode.DownArrow);
         bool fc = Input.GetKey(KeyCode.UpArrow);
-        if (lc && !rc) // Accelerate to the left.
-            a.x = -acceGlide;
-        else if (!lc && rc) // Accelerate to the right.
-            a.x = acceGlide;
-        else // Try to stop glide.
-            a.x = v.x > 0f ? -acceGlide : v.x < 0f ? acceGlide : 0f;
+        bool leftedge = Camera.main.WorldToViewportPoint(this.gameObject.transform.position).x < 0.0f;
+        bool rightedge = Camera.main.WorldToViewportPoint(this.gameObject.transform.position).x > 1.0f;
+        bool bottomedge = Camera.main.WorldToViewportPoint(this.gameObject.transform.position).y < 0.0f;
+        bool topedge = Camera.main.WorldToViewportPoint(this.gameObject.transform.position).y > 1.0f;
 
-        if (bc && !fc) // Accelerate to the back.
-            a.y = -acceBack;
-        else if (!bc && fc) // Accelerate to the front.
-            a.y = acceFront;
+        if (lc && !rc) a.x = -acceGlide; // Accelerate to the left.
+        else if (!lc && rc) a.x = acceGlide; // Accelerate to the right.
         else // Try to stop glide.
+        {
+            a.x = v.x > 0f ? -acceGlide : v.x < 0f ? acceGlide : 0f;
+            float va = Mathf.Abs(v.x);
+            a.x = Mathf.Min(a.x, va / Time.fixedDeltaTime);
+            a.x = Mathf.Max(a.x, -va / Time.fixedDeltaTime);
+        }
+
+        if (bc && !fc) a.y = -acceBack; // Accelerate to the back.
+        else if (!bc && fc) a.y = acceFront; // Accelerate to the front.
+        else // Try to stop glide.
+        {
             a.y = v.y > 0f ? -acceBack : v.y < 0f ? acceFront : 0f;
+            float va = Mathf.Abs(v.y);
+            a.y = Mathf.Min(a.y, va / Time.fixedDeltaTime);
+            a.y = Mathf.Max(a.y, -va / Time.fixedDeltaTime);
+        }
 
         Vector2 dv = a * Time.fixedDeltaTime; // Delta v.
 
-        this.gameObject.transform.Translate(dv * Time.fixedDeltaTime * 0.5f + v * Time.fixedDeltaTime);
         v += dv;
 
+        // Speed limit.
         if (v.x > maxSpeedGlide) v = new Vector2(maxSpeedGlide, v.y);
         if (v.x < -maxSpeedGlide) v = new Vector2(-maxSpeedGlide, v.y);
         if (v.y > maxSpeedFront) v = new Vector2(v.x, maxSpeedFront);
         if (v.y < -maxSpeedBack) v = new Vector2(v.x, -maxSpeedBack);
+        
+        // Edge limit.
+        if (leftedge) v.x = Mathf.Max(v.x, 0.0f);
+        if (rightedge) v.x = Mathf.Min(v.x, 0.0f);
+        if (bottomedge) v.y = Mathf.Max(v.y, 0.0f);
+        if (topedge) v.y = Mathf.Min(v.y, 0.0f);
+
+        // Attribute "Simulated" of rigidBody is disabled !!!
+        // And this is for avoiding some bugs.
+        this.gameObject.transform.position += (Vector3)(dv * 0.5f + v) * Time.fixedDeltaTime;
 
     }
 
@@ -92,10 +117,22 @@ public class Player : SpecObject
     /// </summary>
     void Failed()
     {
-        // Notice we don't destroy this object directly,
-        // to avoid a large number of null-reference error.
-        //Destroy(this.gameObject);
-        this.gameObject.transform.position = new Vector3(0f, -999999999f, 0f);
+        if (!shotdown)
+        {
+            shotdown = true;
+            
+            // Create a failed flash...
+            for (int i = 0; i < deadFX.Length; i++)
+            {
+                GameObject x = Instantiate(deadFX[i]);
+                x.transform.position = this.gameObject.transform.position;
+            }
+
+            // Notice we don't destroy this object directly,
+            // to avoid a large number of null-reference error.
+            //Destroy(this.gameObject);
+            this.gameObject.transform.position = new Vector3(0f, -999999999f, 0f);
+        }
     }
 
     void OnTriggerStay2D(Collider2D x)

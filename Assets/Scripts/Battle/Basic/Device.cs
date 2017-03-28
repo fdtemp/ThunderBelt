@@ -23,7 +23,7 @@ abstract public class Device : MonoBehaviour
     }
 
     protected float t = 0f; // Time counter.
-    bool isPrepared { get { return t == 0f && player.mp >= mpCost; } }
+    bool isPrepared { get { return !player.shotdown && t == 0f && player.mp >= mpCost; } }
 
     virtual protected void FixedUpdate()
     {
