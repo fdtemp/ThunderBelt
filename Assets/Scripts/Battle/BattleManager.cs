@@ -40,11 +40,12 @@ public class BattleManager : MonoBehaviour
         // Weapons and devices assignment...
         // These should be done *after* playerObject is assigned.
         // Only one weapon object (within canvas) and one weapon script can be installed.
+        if (Global.weaponNames == null) { Debug.Log("weapons not assigned!"); return; }
         KeyCode[] code = new KeyCode[] { KeyCode.F, KeyCode.D, KeyCode.S, KeyCode.A };
         for (int i = 0; i <= 3; i++)
         {
-            if (Global.weapons[i] == null) break; // Not assigned.
-            wep[i] = Instantiate(Global.weapons[i]);
+            if (Resources.Load<GameObject>(Global.weaponNames[i]) == null) break; // Not assigned.
+            wep[i] = Instantiate(Resources.Load<GameObject>(Global.weaponNames[i]));
             Debug.Log("TODO: Assign weapons to the correct locations.");
             Weapon w = wep[i].GetComponent<Weapon>();
             // Count the weapon mounts.
@@ -58,13 +59,14 @@ public class BattleManager : MonoBehaviour
                     w.fireLocator[--cnt] = c[d];
             w.keyBind = code[i];
             w.player = player.GetComponent<Player>();
-            
+
         }
+        if (Global.deviceNames == null) { Debug.Log("weapons not assigned!"); return; }
         code = new KeyCode[] { KeyCode.R, KeyCode.E, KeyCode.W, KeyCode.Q };
         for (int i = 0; i <= 3; i++)
         {
-            if (Global.weapons[i] == null) break; // Not assigned.
-            dev[i] = Instantiate(Global.devices[i]);
+            if (Resources.Load<GameObject>(Global.deviceNames[i]) == null) break; // Not assigned.
+            dev[i] = Instantiate(Resources.Load<GameObject>(Global.deviceNames[i]));
             Debug.Log("TODO: Assign devices to the correct locations.");
             Device v = dev[i].GetComponent<Device>();
             // Devices do not have fire locator.

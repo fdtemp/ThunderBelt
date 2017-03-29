@@ -8,7 +8,9 @@ public class SpecObject : MonoBehaviour
 {
     public float hpMax = 1f;
     public float hp = 1f; // Strength / Health.
-    
+
+    public GameObject[] deadFX;
+
     // Regenurate rate.
     public float hpRegen = 0f;
 
@@ -24,7 +26,6 @@ public class SpecObject : MonoBehaviour
         if (hp < 0)
         {
             OnKilled();
-            Destroy(this.gameObject);
             return;
         }
         hp += hpRegen * Time.fixedDeltaTime;
@@ -40,9 +41,17 @@ public class SpecObject : MonoBehaviour
     /// Instead of OnDestroy(), this function can include some
     /// objcet-creation code to produce FX objcet and so on.
     /// </summary>
-    virtual public void OnKilled()
+    virtual protected void OnKilled()
     {
-        // Do nothing...
+        // Create a failed flash...
+        for (int i = 0; i < deadFX.Length; i++)
+        {
+            GameObject x = Instantiate(deadFX[i]);
+            x.transform.position = this.gameObject.transform.position;
+        }
+
+        // Make this object really dead...
+        Destroy(this.gameObject);
     }
 
     /// <summary>

@@ -149,7 +149,6 @@ public class Shield : SpecObject
         {
             s.RecieveDamage(DamageType.Energy, dmg);
             Player player = this.transform.parent.gameObject.GetComponent<Player>();
-            Debug.Log(player.v);
             player.v = (Vector2)(this.gameObject.transform.parent.position -
                 x.gameObject.transform.position).normalized;
         }

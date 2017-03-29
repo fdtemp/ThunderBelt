@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Particle : MonoBehaviour
 {
-    public float speed = 1f;
     public float lifetime = 0.5f;
+    public Vector2 speedLimit = new Vector2(0.5f, 1.0f);
+
     float t = 0f;
 
     Vector2 basev;
@@ -21,9 +22,10 @@ public class Particle : MonoBehaviour
         baseColor = rd.color;
 
         // Random generate a velocity...
+        float speed = Random.Range(speedLimit.x, speedLimit.y);
         float a = Random.Range(0f, 2f * Mathf.PI);
-        basev.x = Mathf.Cos(a);
-        basev.y = -Mathf.Sin(a);
+        basev.x = Mathf.Cos(a) * speed;
+        basev.y = -Mathf.Sin(a) * speed;
         v = basev;
 
     }

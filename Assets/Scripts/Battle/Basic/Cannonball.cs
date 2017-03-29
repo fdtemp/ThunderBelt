@@ -13,10 +13,10 @@ abstract public class Cannonball : MonoBehaviour
     public DamageType damageType = DamageType.Energy;
     public GameObject[] explodeFX;
     public GameObject[] explodeParticles;
+    public bool hitted = false;
 
     float t = 0f;
-    bool hitted = false;
-
+    
     void Update()
     {
         int layer = (this.gameObject.tag.Contains("Ally") || this.gameObject.tag == "Player") ? 
@@ -51,10 +51,13 @@ abstract public class Cannonball : MonoBehaviour
     /// <summary>
     /// The Default moving function.
     /// Do the direct moving depends on speed.
+    /// Inside FixedUpdate, should use fixedDeltaTime.
     /// </summary>
     virtual protected void Move()
     {
-        this.gameObject.transform.Translate(0f, speed * Time.fixedDeltaTime, 0f);
+        if (!hitted) this.gameObject.transform.Translate(0f, speed * Time.fixedDeltaTime, 0f);
+        else this.gameObject.transform.Translate(0f, Global.flySpeed * Time.fixedDeltaTime, 0f);
+        
     }
 
     virtual public void SetTarget(GameObject[] target) // For tracing missiles and projectiles.
@@ -83,11 +86,12 @@ abstract public class Cannonball : MonoBehaviour
         {
             if (t.tag == "Enemy" || t.tag == "EnemyCannonball") return;
         }
-        else if(this.gameObject.tag != "UsedCannonball")
+
+        /*else if(this.gameObject.tag != "UsedCannonball")
         {
             Debug.Log("WARNING: Cannonball tag is not set properly : " + this.gameObject.name);
             return;
-        }
+        }*/
 
         if (hitted) return; // This gameobjcet will be destroyed when timeout in FixedUpdate.
 

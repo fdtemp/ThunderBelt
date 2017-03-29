@@ -22,8 +22,6 @@ public class Player : SpecObject
 
     public GameObject[] targets;
 
-    public GameObject[] deadFX;
-
     public bool shotdown = false;
 
     // Shield properties is here.
@@ -44,11 +42,8 @@ public class Player : SpecObject
 
     protected override void FixedUpdate()
     {
-        if (hp <= 0f)
-        {
-            Failed();
-            return;
-        }
+        // Jedge if killed and HP regen.
+        base.FixedUpdate();
 
         // Ship properties update...
         if (shield != null)
@@ -115,13 +110,14 @@ public class Player : SpecObject
     /// Defines what to do when player plane is taken down.
     /// Normally make a failed tag, destroy ships, and so on.
     /// </summary>
-    void Failed()
+    protected override void OnKilled()
     {
         if (!shotdown)
         {
             shotdown = true;
-            
+
             // Create a failed flash...
+            // Audio is binded with light objects
             for (int i = 0; i < deadFX.Length; i++)
             {
                 GameObject x = Instantiate(deadFX[i]);
