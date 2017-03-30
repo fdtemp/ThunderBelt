@@ -31,7 +31,6 @@ public class Player : SpecObject
     public float spRegen { get { return shield.spRegen; } }
 
     Rigidbody2D rd;
-
     public Vector2 v; // Velocity instead of RigidBody.velocity.
     //public Vector2 v { get { return rd.velocity; } set { rd.velocity = value; } }
 
@@ -40,25 +39,24 @@ public class Player : SpecObject
         rd = this.gameObject.GetComponent<Rigidbody2D>();
     }
 
+    public bool lc, rc, bc, fc;
     protected override void FixedUpdate()
     {
         // Jedge if killed and HP regen.
         base.FixedUpdate();
 
         // Ship properties update...
-        if (shield != null)
-        {
-            if (!shield.shutdown) mp -= shield.energyCost * Time.fixedDeltaTime;
-        }
+        if (!shield.shutdown) mp -= shield.energyCost * Time.fixedDeltaTime;
+        
         mp += mpRegen * Time.fixedDeltaTime;
         if (mp >= mpMax) mp = mpMax;
 
         // Player ship/plane control...
         Vector2 a; // Acceleration at this frame.
-        bool lc = Input.GetKey(KeyCode.LeftArrow);
-        bool rc = Input.GetKey(KeyCode.RightArrow);
-        bool bc = Input.GetKey(KeyCode.DownArrow);
-        bool fc = Input.GetKey(KeyCode.UpArrow);
+        lc = Input.GetKey(KeyCode.LeftArrow);
+        rc = Input.GetKey(KeyCode.RightArrow);
+        bc = Input.GetKey(KeyCode.DownArrow);
+        fc = Input.GetKey(KeyCode.UpArrow);
         bool leftedge = Camera.main.WorldToViewportPoint(this.gameObject.transform.position).x < 0.0f;
         bool rightedge = Camera.main.WorldToViewportPoint(this.gameObject.transform.position).x > 1.0f;
         bool bottomedge = Camera.main.WorldToViewportPoint(this.gameObject.transform.position).y < 0.0f;

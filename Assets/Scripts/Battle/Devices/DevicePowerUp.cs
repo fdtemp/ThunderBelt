@@ -16,8 +16,6 @@ public class DevicePowerUp : Device
 
     public override void Launch()
     {
-        Debug.Log("Launch!");
-
         // Find weapons from UI canvas...
         int cc = this.transform.parent.childCount;
         for (int i = 0; i < cc; i++)
