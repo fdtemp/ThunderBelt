@@ -23,10 +23,10 @@ public class FlasherStay : MonoBehaviour
     {
         t += Time.deltaTime;
         float rate = t / lifetime;
-        if (rate < 0f) { Destroy(this.gameObject); return; }
+        if (rate > 1f) { Destroy(this.gameObject); return; }
 
         // Scale...
-        float srate = Mathf.Exp(1 - rate);
+        float srate = Mathf.Exp(1 - rate) - 1;
 
         Vector2 scale = this.gameObject.transform.localScale;
         scale.x = bscale.x * srate;

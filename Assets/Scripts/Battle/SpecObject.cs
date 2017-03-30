@@ -65,49 +65,49 @@ public class SpecObject : MonoBehaviour
     {
         switch (amt)
         {
-            case ArmorType.Field:
+            case ArmorType.Field: // Shield.
                 switch (dmt)
                 {
-                    case DamageType.Energy: return 1.25f * a;
-                    case DamageType.Explode: return 0.6f * a;
-                    case DamageType.Fragment: return 0.4f * a;
-                    case DamageType.Impact: return 2.0f * a;
+                    case DamageType.Energy: return 1.0f * a;
+                    case DamageType.Explode: return 1.0f * a;
+                    case DamageType.Fragment: return 0.6f * a;
+                    case DamageType.Impact: return 1.25f * a;
                     default: return 0f;
                 }
-            case ArmorType.Atom:
+            case ArmorType.Atom: // Shield.
                 switch (dmt)
                 {
                     case DamageType.Energy: return 0.8f * a;
                     case DamageType.Explode: return 1.25f * a;
-                    case DamageType.Fragment: return 0.3f * a;
-                    case DamageType.Impact: return 0.6f * a;
+                    case DamageType.Fragment: return 0.6f * a;
+                    case DamageType.Impact: return 0.8f * a;
                     default: return 0f;
                 }
             case ArmorType.Nuclear:
                 switch (dmt)
                 {
-                    case DamageType.Energy: return 0.6f * a;
-                    case DamageType.Explode: return 1.2f * a;
+                    case DamageType.Energy: return 0.8f * a;
+                    case DamageType.Explode: return 0.9f * a;
                     case DamageType.Fragment: return 1.5f * a;
-                    case DamageType.Impact: return 0.4f * a;
+                    case DamageType.Impact: return 1.25f * a;
                     default: return 0f;
                 }
             case ArmorType.Steel:
                 switch (dmt)
                 {
-                    case DamageType.Energy: return a;
-                    case DamageType.Explode: return 0.8f * a;
-                    case DamageType.Fragment: return 0.25f * a;
-                    case DamageType.Impact: return 0.8f * a;
+                    case DamageType.Energy: return 1.15f * a;
+                    case DamageType.Explode: return 1.15f * a;
+                    case DamageType.Fragment: return 0.75f * a;
+                    case DamageType.Impact: return 0.75f * a;
                     default: return 0f;
                 }
             case ArmorType.Struct:
                 switch (dmt)
                 {
                     case DamageType.Energy: return 1.0f * a;
-                    case DamageType.Explode: return 1.0f * a;
-                    case DamageType.Fragment: return 4.0f * a;
-                    case DamageType.Impact: return 0.5f * a;
+                    case DamageType.Explode: return 1.2f * a;
+                    case DamageType.Fragment: return 1.5f * a;
+                    case DamageType.Impact: return 0.8f * a;
                     default: return 0f;
                 }
             default: return a;
