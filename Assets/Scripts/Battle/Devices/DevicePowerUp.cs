@@ -5,14 +5,17 @@ using UnityEngine;
 
 /// <summary>
 /// Device PowerUp:
-/// Accelerate 20% of power regen and 50% of fire speed.
+/// Accelerate *rate1* of power regen and *rate2* of fire speed.
 /// </summary>
 public class DevicePowerUp : Device
 {
     public float lasttime;
 
-    float ft;
-    bool running;
+    public float ft;
+    public bool running;
+
+    public float regenRateBounty = 0.2f;
+    public float fireRatebounty = 0.5f;
 
     public override void Launch()
     {
@@ -24,7 +27,8 @@ public class DevicePowerUp : Device
             if (x.name.Contains("weapon") || x.name.Contains("Weapon"))
             {
                 Weapon w = x.GetComponent<Weapon>();
-                w.cd *= 0.5f;
+                w.cd *= 1.0f / (1.0f + fireRatebounty);
+                player.mpRegen *= 1.0f + regenRateBounty;
             }
         }
 
@@ -49,7 +53,8 @@ public class DevicePowerUp : Device
                 if (x.name.Contains("weapon") || x.name.Contains("Weapon"))
                 {
                     Weapon w = x.GetComponent<Weapon>();
-                    w.cd *= 2f;
+                    w.cd *= 1.0f + fireRatebounty;
+                    player.mpRegen *= 1.0f / (1.0f + regenRateBounty);
                 }
             }
 

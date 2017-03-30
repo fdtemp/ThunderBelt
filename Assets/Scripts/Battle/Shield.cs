@@ -141,9 +141,9 @@ public class Shield : SpecObject
         if (x.gameObject.tag != "Enemy" && x.gameObject.tag != "Wreckage") return;
 
         // Colliding damage is defined here.
-        //float dmgps = 1500;
-        float dmg = 300; //dmgps * Time.fixedDeltaTime;
-        sp -= dmg;
+        float dmgps = 3000;
+        float dmg = dmgps * Time.fixedDeltaTime;
+        sp -= dmg; // *Not* RevieveDamage.
         SpecObject s = x.gameObject.GetComponent<SpecObject>();
         if (s != null)
         {

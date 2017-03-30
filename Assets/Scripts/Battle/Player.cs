@@ -93,10 +93,10 @@ public class Player : SpecObject
         if (v.y < -maxSpeedBack) v = new Vector2(v.x, -maxSpeedBack);
         
         // Edge limit.
-        if (leftedge) v.x = Mathf.Max(v.x, 0.0f);
-        if (rightedge) v.x = Mathf.Min(v.x, 0.0f);
-        if (bottomedge) v.y = Mathf.Max(v.y, 0.0f);
-        if (topedge) v.y = Mathf.Min(v.y, 0.0f);
+        if (leftedge) { v.x = Mathf.Max(v.x, 0.0f); dv.x = Mathf.Max(dv.x, 0f); }
+        if (rightedge) { v.x = Mathf.Min(v.x, 0.0f); dv.x = Mathf.Min(dv.x, 0f); }
+        if (bottomedge) { v.y = Mathf.Max(v.y, 0.0f); dv.y = Mathf.Max(dv.y, 0f); }
+        if (topedge) { v.y = Mathf.Min(v.y, 0.0f); dv.y = Mathf.Min(dv.y, 0f); }
 
         // Attribute "Simulated" of rigidBody is disabled !!!
         // And this is for avoiding some bugs.
@@ -135,9 +135,9 @@ public class Player : SpecObject
         if (!shield.shutdown) return; // Shield will protect it from collide.
 
         // Colliding damage is defined here.
-        //float dmgps = 1000;
-        float dmg = 600; //dmgps * Time.fixedDeltaTime;
-        hp -= dmg;
+        float dmgps = 3000;
+        float dmg = dmgps * Time.fixedDeltaTime;
+        hp -= dmg; // *Not* RevieveDamage.
         SpecObject s = x.gameObject.GetComponent<SpecObject>();
         if (s != null)
         {
